@@ -1,11 +1,14 @@
+// Variables d'environnement
+require('dotenv').config();
+
 const express = require('express');
-
-const app = express();
-
-app.use(express.json());
-
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const sauceRoutes = require('./routes/Sauce')
+const userRoutes = require('./routes/User');
+const path = require('path');
 
+// Connexion à MongoDB
 mongoose.connect('mongodb+srv://Desert76:Eb447790^^@cluster0.g81ga.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
     {
         useNewUrlParser: true,
@@ -14,32 +17,25 @@ mongoose.connect('mongodb+srv://Desert76:Eb447790^^@cluster0.g81ga.mongodb.net/m
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
+// Création de l'application express
+const app = express();
+
+// Gestion des CORS
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
 
+// Parsing body en JSON
+app.use(bodyParser.json());
 
+// Routes
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/api/sauces', sauceRoutes);
+app.use('/api/auth', userRoutes);
 
-app.use((req, res, next) => {
-    console.log('Requête reçue !');
-    next();
-});
-
-app.use((req, res, next) => {
-    res.status(201);
-    next();
-});
-
-app.use((req, res, next) => {
-    res.json({ message: 'Votre requête a bien été reçue !' });
-    next();
-});
-
-app.use((req, res, next) => {
-    console.log('Réponse envoyée avec succès !');
-});
-
+// Exportation de l'appli
 module.exports = app;
