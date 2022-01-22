@@ -15,9 +15,11 @@ mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONG
     })
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée...'));
+    
 
 const app = express();
 app.use(helmet());
+
 
 app.use((req, res, next) => {
     res.setHeader('Cross-Origin-Resource-Policy', 'same-site')
