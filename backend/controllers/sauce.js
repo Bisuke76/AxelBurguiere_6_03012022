@@ -1,4 +1,4 @@
-const Sauce = require('../models/sauce');
+const Sauce = require('../models/Sauce');
 const fs = require('fs');
 
 
@@ -20,7 +20,7 @@ exports.createSauce = (req, res, next) => {
     delete sauceObject._id;
     const sauce = new Sauce({
         ...sauceObject,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        imageUrl: `http://${req.get('host')}/images/${req.file.filename}`,
         likes: 0,
         dislikes: 0
     });
